@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+
+  {% include 'header.html' %}
+  <main class="container">
+    <section class="row">
+      <div class="col-12 col-lg-8">
+          <h1 class="h3 my-5">Личный кабинет</h1>      
+          <p class="h3 my-2">Пользователь <u>{{current_user.mail}}</u>. {{welcome}}</p>
+       {% if count_orders == 0%}
+       <h2 class="h3 my-5">У вас не было заказов ...</h2> 
+       {% else %}
+        {% for order in orders %}
+        <h2 class="h3 my-5">История заказов:</h2>  
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-7 col-lg-9">
+                  <span class="h5">Заказ от {{order.date.strftime('%Y-%m-%d')}}</span>
+                  <span class="h5"> на сумму {{order.amount|int}} руб.</span>
+                  <span class="h5"> в статусе <u>{{order.status}}</u></span>
+                </div>
+
+              </div>
+            </li>
+            <div class="card-body">
+              <div class="row">
+                {% for meal in order.meals%}
+                <p class="col-4 text-muted">{{meal.title}}</p>
+                <p class="col-2 text-muted"> 1</p>
+                <p class="col-6 text-muted"> {{meal.price|int}} </p>
+                {% endfor %}
+              </div>
+            </div>
+          </ul>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </section>
+  </main>
+  {% endblock %}

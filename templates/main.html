@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+
+  {% include 'header.html' %}
+  <main class="container mt-3">
+  {% include 'main_banner.html' %}
+  {% for cat in cat_meals %}
+    <section>
+      <h3 class="my-4">{{cat[1]}}</h3>
+      <div class="row mt-4">
+        {% for meal in cat[2]%}
+        <div class="col-12 col-md-4">
+          <div class="card mb-3 h-100">
+            <img src="/static/pictures/{{meal.picture}}" width="300" height="200" class="card-img-top" alt="">
+            <div class="card-body">
+              <h4 class="h5 card-title">{{meal.title}}</h4>
+              <p class="card-text">{{meal.description}}</p>
+              <a href="/addtocart/{{meal.id}}/" btn btn-danger">В корзину</a>
+            </div>
+          </div>
+        </div>
+      {% endfor%}
+      </div>
+    </section>
+{% endfor %}
+
+  </main>
+  {% endblock %}

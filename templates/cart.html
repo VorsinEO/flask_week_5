@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+{% include 'header.html' %}
+  <main class="container">
+    <h1 class="h3 my-4">Корзина</h1>
+    {% if is_meal_del%}
+    <div class="alert alert-warning" role="alert">Блюдо удалено из корзины</div>
+    {% endif%}
+    {% if cart_count>0 %}
+    {% if current_user == '' %}
+            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="/login/">войдите</a> или <a href="/register/">зарегистрируйтесь</a></div>
+            
+
+            
+          
+            {% else %}
+            <div class="row mt-5">
+
+
+                <div class="col-4">
+                  <form action="/cart/" method="POST">
+            <!-- Чтобы валидацию WTF пройти вставляем внутри формы такое-->
+          {{ form.csrf_token() }}
+          <h4 class="">Ваши данные</h4>
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+              <label for="name">Ваше имя</label>
+              {{form.name(class="font-weight-bold form-control")}}
+              {% for err in form.name.errors %}
+              <p class="alert-warning">{{ err }}</p> 
+              {% endfor %} 
+            </div>
+          </div>
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+              <label for="name">Адрес</label>
+              {{form.address(class="font-weight-bold form-control")}}
+              {% for err in form.address.errors %}
+              <p class="alert-warning">{{ err }}</p> 
+              {% endfor %}
+            </div>
+          </div>
+          <div class="md-4 form-label-group">
+            <label for="name">Электропочта</label>
+            
+            {% if current_user == ''%}
+            {{form.mail(class="form-control")}}
+            {% else%}
+            {{form.mail(class="form-control", value=current_user.mail)}}
+            {% endif%}
+            {% for err in form.mail.errors %}
+            <p class="alert-warning">{{ err }}</p> 
+            {% endfor %}
+          </div>
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+              <label for="name">Телефон</label>
+              {{form.phone(class="font-weight-bold form-control")}}
+              {% for err in form.phone.errors %}
+              <p class="alert-warning">{{ err }}</p> 
+              {% endfor %}
+            </div>
+            <button type="submit" class=" mt-3 mb-5 btn btn-danger">Оформить заказ</button>
+            {% endif %}
+            
+            
+
+          </form>
+        </div>
+        </div>
+      <div class="col-1"></div>
+     
+      <div class="col-7">
+        <h4 class="mb-3 col-7 mb-5">Блюд в корзине: {{cart_count}}</h4>
+        <table class="table">
+          <tbody>
+          {% for meal in cart_list%}
+            <tr>
+              <th scope="row">{{meal.title}}</th>
+              <td></td>
+              <td>1</td>
+              <td>{{meal.price|int}}</td>
+              <td><a class="text-danger" href="/delfromcart/{{meal.id}}/">Удалить</a></td>
+            </tr>
+          {% endfor%}
+          </tbody>
+        </table>
+        <hr>
+        <p class="display-4 my-2 ">{{cart_amount|int}} руб</p>
+      </div>
+      {% else%}
+      <h4 class="mb-3 col-7 mb-5">Вы ничего не добавили в корзину :-(</h4>
+      {% endif%}
+    </div>
+  </main>
+{% endblock %}
